@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DRF Router Cheat Sheet Dashboard</title>
+    <style>
+        :root {
+            --bg: #f9fafb;
+            --text: #111;
+            --sidebar-bg: #333;
+            --sidebar-text: #fff;
+            --card-bg: #fff;
+            --border: #ddd;
+            --primary: #4CAF50;
+            --hover-bg: #f1f8e9;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1e1e1e;
+            --text: #f5f5f5;
+            --sidebar-bg: #111;
+            --sidebar-text: #ddd;
+            --card-bg: #2a2a2a;
+            --border: #444;
+            --primary: #81c784;
+            --hover-bg: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        aside h2 {
+            margin: 0 0 16px;
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        aside nav a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 6px;
+            text-decoration: none;
+            color: var(--sidebar-text);
+            border-radius: 5px;
+            background: var(--sidebar-bg);
+        }
+
+        aside nav a:hover {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        h2 {
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--hover-bg);
+        }
+
+        pre {
+            background-color: var(--hover-bg);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text);
+            border-top: 1px solid var(--border);
+        }
+
+        button.toggle-theme {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<aside>
+    <h2>📚 Contents</h2>
+    <nav>
+        <a href="#comparison">Comparison Table</a>
+        <a href="#simple-url">SimpleRouter URLs</a>
+        <a href="#default-url">DefaultRouter URLs</a>
+        <a href="#key-methods">Key Router Methods</a><a href="#comparison">Comparison</a>
+        <a href="#simple">SimpleRouter</a>
+        <a href="#default">DefaultRouter</a>
+        <a href="#protips">Pro Tips</a>
+
+        <a href="#third-party">Third Party Helpers</a>
+        <a href="#custom-router">Custom Router Examples</a>
+        <a href="#common-pitfalls">Common Pitfalls</a>
+    </nav>
+</aside>
+
+<main>
+    <button class="toggle-theme">🌗 Toggle Theme</button>
+
+    <h1>DRF Router Cheat Sheet Dashboard</h1>
+
+
+    <section id="simple">
+        <h2>✅ SimpleRouter</h2>
+        <p>A lightweight router that maps basic CRUD operations.</p>
+        <table>
+            <tr><th>URL</th><th>Method</th><th>Action</th><th>Name</th></tr>
+            <tr><td>{prefix}/</td><td>GET</td><td>list</td><td>{basename}-list</td></tr>
+            <tr><td>{prefix}/</td><td>POST</td><td>create</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/</td><td>GET</td><td>retrieve</td><td>{basename}-detail</td></tr>
+            <tr><td>{prefix}/{lookup}/</td><td>PUT</td><td>update</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/</td><td>PATCH</td><td>partial_update</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/</td><td>DELETE</td><td>destroy</td><td>-</td></tr>
+        </table>
+    </section>
+
+    <section id="default">
+        <h2>✅ DefaultRouter</h2>
+        <p>Extends SimpleRouter with an API root and format suffixes.</p>
+        <table>
+            <tr><th>URL</th><th>Method</th><th>Action</th><th>Name</th></tr>
+            <tr><td>[.format]</td><td>GET</td><td>API Root</td><td>api-root</td></tr>
+            <tr><td>{prefix}/[.format]</td><td>GET</td><td>list</td><td>{basename}-list</td></tr>
+            <tr><td>{prefix}/[.format]</td><td>POST</td><td>create</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/[.format]</td><td>GET</td><td>retrieve</td><td>{basename}-detail</td></tr>
+            <tr><td>{prefix}/{lookup}/[.format]</td><td>PUT</td><td>update</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/[.format]</td><td>PATCH</td><td>partial_update</td><td>-</td></tr>
+            <tr><td>{prefix}/{lookup}/[.format]</td><td>DELETE</td><td>destroy</td><td>-</td></tr>
+        </table>
+    </section>
+
+    
+    <section id="comparison">
+        <h2>🔗 Quick Comparison Table</h2>
+        <!-- Your table here -->
+
+        <table>
+            <tr><th>Feature</th><th>SimpleRouter</th><th>DefaultRouter</th><th>Custom Router</th></tr>
+            <tr><td>CRUD Actions</td><td>✅</td><td>✅</td><td>✅ (customizable)</td></tr>
+            <tr><td>API Root View</td><td>❌</td><td>✅</td><td>❌ (manual)</td></tr>
+            <tr><td>Format Suffixes</td><td>❌</td><td>✅</td><td>❌</td></tr>
+            <tr><td>Trailing Slash Control</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Custom Path Rules</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        </table>
+    </section>
+
+    <!-- Other sections like SimpleRouter, DefaultRouter, etc. -->
+    <section id="simple-url">
+        <h2>🌐 SimpleRouter URL Patterns</h2>
+        <table>
+            <tr><th>URL</th><th>Method</th><th>Action</th><th>Name</th></tr>
+            <tr><td>{prefix}/</td><td>GET</td><td>list</td><td>{basename}-list</td></tr>
+            <tr><td>{prefix}/{lookup}/</td><td>GET</td><td>retrieve</td><td>{basename}-detail</td></tr>
+        </table>
+    </section>
+    
+    <section id="default-url">
+        <h2>🌐 DefaultRouter URL Patterns</h2>
+        <table>
+            <tr><th>URL</th><th>Method</th><th>Action</th><th>Name</th></tr>
+            <tr><td>{prefix}/[.format]</td><td>GET</td><td>list</td><td>{basename}-list</td></tr>
+            <tr><td>{prefix}/{lookup}/[.format]</td><td>GET</td><td>retrieve</td><td>{basename}-detail</td></tr>
+        </table>
+    </section>
+    
+    <section id="key-methods">
+        <h2>🛠️ Key Router Methods</h2>
+        <table>
+            <tr><th>Method</th><th>Purpose</th></tr>
+            <tr><td>get_urls()</td><td>Defines URL patterns.</td></tr>
+            <tr><td>get_default_basename()</td><td>Auto-generates basename.</td></tr>
+            <tr><td>self.registry</td><td>Stores (prefix, viewset, basename).</td></tr>
+        </table>
+    </section>
+    
+ 
+    <section id="comparison">
+        <h2>🔗 Comparison Table</h2>
+        <table>
+            <tr><th>Feature</th><th>SimpleRouter</th><th>DefaultRouter</th></tr>
+            <tr><td>CRUD Actions</td><td>✅</td><td>✅</td></tr>
+            <tr><td>API Root View</td><td>❌</td><td>✅</td></tr>
+            <tr><td>Format Suffixes</td><td>❌</td><td>✅</td></tr>
+            <tr><td>Custom Path Rules</td><td>❌</td><td>❌</td></tr>
+        </table>
+    </section>
+
+    <section id="protips">
+        <h2>💡 Pro Tips</h2>
+        <ul>
+            <li>Disable trailing slashes: <code>SimpleRouter(trailing_slash=False)</code></li>
+            <li>Use UUID lookup: <code>lookup_value_converter='uuid'</code></li>
+            <li>Prefer DefaultRouter if you want an auto API root.</li>
+            <li>Use <code>@action</code> for custom viewset logic like <code>set_password()</code>.</li>
+        </ul>
+    </section>
+    <section id="third-party">
+        <h2>💎 Third Party Helpers</h2>
+        <table>
+            <tr><th>Package</th><th>Purpose</th></tr>
+            <tr><td>drf-nested-routers</td><td>Nested resources (like /users/5/orders/).</td></tr>
+            <tr><td>wq.db.rest</td><td>Auto-registers models like Django Admin.</td></tr>
+            <tr><td>drf-extensions</td><td>More router customization.</td></tr>
+        </table>
+    </section>
+
+    <section id="custom-router">
+        <h2>🔧 Custom Router Examples</h2>
+        <p>Build your own router when you need to break free of the default behavior.</p>
+
+        <h3>1️⃣ Add a Global 'health-check' Route</h3>
+        <pre><code>
+from rest_framework.routers import DefaultRouter
+
+class HealthCheckRouter(DefaultRouter):
+    def get_urls(self):
+        urls = super().get_urls()
+        urls.append(path('health/', self.health_check, name='health-check'))
+        return urls
+
+    def health_check(self, request):
+        return JsonResponse({'status': 'ok'})
+        </code></pre>
+
+        <h3>2️⃣ No Trailing Slash Router</h3>
+        <pre><code>
+from rest_framework.routers import SimpleRouter
+
+class NoSlashRouter(SimpleRouter):
+    trailing_slash = ''
+        </code></pre>
+
+        <h3>3️⃣ Custom Router with Global List-All</h3>
+        <pre><code>
+from rest_framework.routers import SimpleRouter
+
+class ListAllRouter(SimpleRouter):
+    def get_urls(self):
+        urls = super().get_urls()
+        urls.append(path('all/', self.list_all, name='list-all'))
+        return urls
+
+    def list_all(self, request):
+        return Response({'detail': 'Custom list-all here'})
+        </code></pre>
+    </section>
+
+    <section id="common-pitfalls">
+        <h2>🚨 Common Pitfalls & How to Dodge Them</h2>
+        <ul>
+            <li><strong>Trailing Slash Confusion:</strong> DRF routers love adding slashes. Want none? Set <code>trailing_slash = ''</code>.</li>
+            <li><strong>Forgetting to call super().get_urls():</strong> When you override, remember to pull in the parent URLs first!</li>
+            <li><strong>Over-customization:</strong> If you're rewriting 80% of a router, it might be better to use plain Django URL patterns instead.</li>
+            <li><strong>Nested URLs Need Nested Routers:</strong> Use <code>drf-nested-routers</code> instead of trying to hack it yourself.</li>
+        </ul>
+    </section>
+
+    <footer>
+        🚀 Built with ❤️ for DRF Developers By Ruth Ewho — Last Updated: March 2025
+    </footer>
+</main>
+
+<script>
+    const themeToggle = document.querySelector('.toggle-theme');
+    themeToggle.addEventListener('click', () => {
+        document.documentElement.toggleAttribute('data-theme', true);
+        if (document.documentElement.hasAttribute('data-theme')) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    });
+</script>
+
+</body>
+</html>
